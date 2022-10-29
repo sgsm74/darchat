@@ -21,3 +21,12 @@ class WebSocketParams extends Equatable {
   @override
   List<Object?> get props => [ws];
 }
+
+class UploadParams extends Equatable {
+  const UploadParams({required this.file});
+
+  final File file;
+
+  @override
+  List<Object?> get props => [file];
+}

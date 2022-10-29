@@ -1,3 +1,4 @@
+import 'package:darchat/chat/data/models/attachment_image_model.dart';
 import 'package:darchat/chat/domain/entities/messsge.dart';
 import 'package:darchat/chat/domain/entities/method.dart';
 import 'package:darchat/core/consts/consts.dart';
@@ -11,9 +12,14 @@ class MessageModel extends Message {
     required super.userId,
     required super.name,
     required super.date,
+    super.images,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json) {
+    List<AttachmentImageModel> images = [];
+    if (json['fields']['args'].first['attachments'] != null) {
+      images.add(AttachmentImageModel.fromJson(json));
+    }
     return MessageModel(
       id: json['id'],
       roomId: json['fields']['args'].first['rid'],
@@ -21,6 +27,7 @@ class MessageModel extends Message {
       userId: json['fields']['args'].first['u']['_id'],
       name: json['fields']['args'].first['u']['name'],
       date: json['fields']['args'].first['ts']['\$date'],
+      images: images,
     );
   }
   toJson(String message) {
@@ -47,6 +54,7 @@ class MessageModel extends Message {
       userId: userId,
       name: name,
       date: date,
+      images: images,
     );
   }
 }

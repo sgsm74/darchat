@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class Constants {
+  static Color supportChatBackground = const Color(0xFF00AB97);
+  static Color customerChatBackground = const Color(0xfff4f4f4);
   static Color kBackgroundColor = const Color(0xffFCEDEA);
   static Color kTextColor = const Color(0xff243443);
   static Color kDisableButtonBackgroundColor = const Color(0xffC3C7CB);
@@ -16,7 +20,10 @@ class Constants {
 }
 
 class SokcetData {
-  static const String websocket = "wss://darchat.darkube.app/websocket";
-  static const String myToken = "token1006";
-  static const String roomId = "room1007";
+  static const String domain = 'darchat.darkube.app';
+  static const String url = 'https://$domain';
+  static const String websocket = "wss://$domain/websocket";
+  static String myToken = "token${Random().nextInt(10000)}";
+  static String roomId = "room${Random().nextInt(10000)}";
+  static String upload(String roomId) => '$url/api/v1/livechat/upload/$roomId';
 }

@@ -21,3 +21,10 @@ class SendMessageEvent extends ChatEvent {
   });
   final String message;
 }
+
+class UploadEvent extends ChatEvent {
+  const UploadEvent({
+    required this.file,
+  });
+  final File file;
+}

@@ -28,3 +28,5 @@ class WebSocketDisonnectSuccessState extends ChatState {
 }
 
 class AddEventSuccessState extends ChatState {}
+
+class UploadSuccessState extends ChatState {}

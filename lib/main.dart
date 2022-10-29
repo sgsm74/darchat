@@ -1,13 +1,9 @@
-import 'dart:io';
-
+import 'package:darchat/chat/presentation/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:darchat/injection.dart' as di;
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'chat/presentation/bloc/chat_bloc.dart';
-import 'chat/presentation/pages/chat_screen.dart';
 import 'core/consts/consts.dart';
-import 'injection.dart';
+import 'package:darchat/router.dart' as app_route;
 
 void main() async {
   await di.init();
@@ -21,75 +17,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'پشتیبانی',
+      onGenerateRoute: app_route.Router.generateRoute,
+      home: const HomeScreen(),
+      initialRoute: app_route.home,
       theme: ThemeData(
-          scaffoldBackgroundColor: const Color(0xffFCEDEA),
           fontFamily: 'Dana',
-          appBarTheme: AppBarTheme(
-            backgroundColor: Constants.kBackgroundColor,
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color(0xfff7f7f7),
             elevation: 0,
           )),
-      home: BlocProvider(
-        create: (context) => sl<ChatBloc>()..add(ConnectEvent()),
-        child: const MyHomePage(),
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  WebSocket? ws;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocConsumer<ChatBloc, ChatState>(
-        listener: (context, state) {
-          if (state is WebSocketConnectSuccessState) {
-            ws = state.webSocket;
-          }
-        },
-        builder: (context, state) {
-          if (state is ChatLoadingState) {
-            return const Center(
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else if (state is WebSocketConnectSuccessState) {
-            return ChatScreen(
-              ws: ws!,
-            );
-          }
-          return const SizedBox();
-        },
-      ),
-      // floatingActionButton: Row(
-      //   children: [
-      //     FloatingActionButton(
-      //       onPressed: () {
-      //         BlocProvider.of<ChatBloc>(context).add(ConnectEvent());
-      //       },
-      //       tooltip: 'Increment',
-      //       child: const Icon(Icons.add),
-      //     ),
-      //     FloatingActionButton(
-      //       onPressed: () async {
-      //         await ws!.close();
-      //       },
-      //       tooltip: 'dec',
-      //       child: const Icon(Icons.minor_crash),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }

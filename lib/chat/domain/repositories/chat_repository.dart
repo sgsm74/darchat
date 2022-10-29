@@ -8,4 +8,5 @@ abstract class ChatRepository {
   Future<Either<Failure, WebSocket>> connect();
   Future<Either<Failure, OK>> add<T>(WebSocket ws, T data);
   Future<Either<Failure, OK>> disconnect<T>(WebSocket ws);
+  Future<Either<Failure, OK>> upload<T>(File file);
 }

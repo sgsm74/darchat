@@ -13,8 +13,8 @@ class AttachmentImageModel extends AttachmentImage {
   });
 
   factory AttachmentImageModel.fromJson(Map<String, dynamic> json) {
-    final data = json['fields']['args'];
-    final attachments = json['fields']['args']['attachments'];
+    final data = json['fields']['args'].first;
+    final attachments = json['fields']['args'].first['attachments'].first;
     return AttachmentImageModel(
       id: data['file']['_id'],
       title: attachments['title'],
@@ -24,6 +24,18 @@ class AttachmentImageModel extends AttachmentImage {
       width: attachments['image_dimensions']['width'],
       height: attachments['image_dimensions']['height'],
       preview: attachments['image_preview'],
+    );
+  }
+  AttachmentImage toEntity() {
+    return AttachmentImage(
+      id: id,
+      title: title,
+      link: link,
+      width: width,
+      height: height,
+      preview: preview,
+      url: url,
+      size: size,
     );
   }
 }

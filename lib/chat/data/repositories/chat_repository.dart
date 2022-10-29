@@ -3,15 +3,14 @@ import 'dart:io';
 
 import 'package:darchat/chat/data/models/connect.dart';
 import 'package:darchat/chat/data/models/initial_data.dart';
-import 'package:darchat/chat/data/models/pong.dart';
-import 'package:darchat/chat/data/models/stream.dart';
-import 'package:darchat/chat/data/models/visitor_model.dart';
+
 import 'package:darchat/core/utils/ok.dart';
 import 'package:dartz/dartz.dart';
 
 import 'package:darchat/chat/data/datasources/chat_remote_datasource.dart';
 import 'package:darchat/chat/domain/repositories/chat_repository.dart';
 import 'package:darchat/core/errors/errors.dart';
+import 'package:dio/dio.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
   ChatRepositoryImpl({
@@ -67,6 +66,17 @@ class ChatRepositoryImpl implements ChatRepository {
       return Left(ServerFailure(message: e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, OK>> upload<T>(File file) async {
+    try {
+      await chatRemoteDataSource.upload(file);
+      return Right(OK());
+    } on DioError catch (e) {
+      return Left(ServerFailure(message: e.message));
+    }
+  }
+
   // Future<Either<Failure, T>> listen<T>(WebSocket ws) async {
   //   try {
   //     ws.listen(

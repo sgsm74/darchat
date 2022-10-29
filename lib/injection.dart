@@ -2,6 +2,7 @@ import 'package:darchat/chat/data/datasources/chat_remote_datasource.dart';
 import 'package:darchat/chat/data/repositories/chat_repository.dart';
 import 'package:darchat/chat/domain/repositories/chat_repository.dart';
 import 'package:darchat/chat/domain/usecases/connect.dart';
+import 'package:darchat/chat/domain/usecases/upload.dart';
 import 'package:darchat/chat/presentation/bloc/chat_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -14,11 +15,15 @@ Future<void> init() async {
 void _injectChat() {
   //bloc
   sl.registerFactory(
-    () => ChatBloc(connectUseCase: sl()),
+    () => ChatBloc(
+      connectUseCase: sl(),
+      uploadUseCase: sl(),
+    ),
   );
 
   //usecase
   sl.registerLazySingleton(() => ConnectUseCase(repository: sl()));
+  sl.registerLazySingleton(() => UploadUseCase(repository: sl()));
 
   //repository
   sl.registerLazySingleton<ChatRepository>(
