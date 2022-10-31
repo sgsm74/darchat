@@ -5,11 +5,11 @@ class AttachmentImageModel extends AttachmentImage {
     required super.id,
     required super.title,
     required super.link,
-    required super.url,
-    required super.size,
-    required super.height,
-    required super.width,
-    required super.preview,
+    super.url,
+    super.size,
+    super.height,
+    super.width,
+    super.preview,
   });
 
   factory AttachmentImageModel.fromJson(Map<String, dynamic> json) {
@@ -21,8 +21,8 @@ class AttachmentImageModel extends AttachmentImage {
       link: attachments['title_link'],
       url: attachments['image_url'],
       size: attachments['image_size'],
-      width: attachments['image_dimensions']['width'],
-      height: attachments['image_dimensions']['height'],
+      width: attachments['image_dimensions']?['width'],
+      height: attachments['image_dimensions']?['height'],
       preview: attachments['image_preview'],
     );
   }

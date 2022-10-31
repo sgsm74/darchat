@@ -35,17 +35,19 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   Future<OK> upload(File file) async {
     Dio dio = Dio();
     try {
-      FormData formData = FormData.fromMap({
-        "file": file,
-      });
+      FormData formData = FormData.fromMap(
+        {
+          "file": await MultipartFile.fromFile(file.path),
+        },
+      );
       final result = await dio.post(
         SokcetData.upload(SokcetData.roomId),
         data: formData,
         options: Options(
           headers: {
             'x-visitor-token': SokcetData.myToken,
-            'content-type':
-                'multipart/form-data; boundary=----WebKitFormBoundarySBoorupw4A3Qnjpr',
+            Headers.contentTypeHeader: ContentType.parse('image/jpg').mimeType,
+            Headers.contentLengthHeader: formData.length
           },
         ),
       );

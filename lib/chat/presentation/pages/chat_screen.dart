@@ -40,7 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     if (result != null) {
       file = File(result.files.single.path!);
-      print(file!.path);
+      setState(() {});
       //BlocProvider.of<ChatBloc>(context).add(UploadEvent(file: file));
     } else {
       // User canceled the picker
@@ -57,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             onPressed: () {
               filePicker();
-              setState(() {});
+              print(file);
               if (file != null) {
                 BlocProvider.of<ChatBloc>(context)
                     .add(UploadEvent(file: file!));
@@ -118,14 +118,16 @@ class _ChatScreenState extends State<ChatScreen> {
                     }
                   ]
                 };
-                messages.add(Message(
-                  id: id,
-                  roomId: SokcetData.roomId,
-                  body: controller.text,
-                  userId: visitor!.id,
-                  name: visitor!.name,
-                  date: DateTime.now().millisecondsSinceEpoch,
-                ));
+                if (messages.isEmpty) {
+                  messages.add(Message(
+                    id: id,
+                    roomId: SokcetData.roomId,
+                    body: controller.text,
+                    userId: visitor!.id,
+                    name: visitor!.name,
+                    date: DateTime.now().millisecondsSinceEpoch,
+                  ));
+                }
                 widget.ws.add(jsonEncode(map));
                 controller.text = '';
               }
@@ -210,9 +212,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   final message =
                       MessageModel.fromJson(jsonDecode(snapshot.data))
                           .toEntity();
-                  if (message.userId != visitor!.id) {
-                    messages.add(message);
-                  }
+                  messages.add(message);
                 }
                 if (messages.isNotEmpty) {
                   if (jsonDecode(snapshot.data)['id'] == messages.first.id) {
@@ -336,8 +336,13 @@ class _ChatScreenState extends State<ChatScreen> {
                                                       : Colors.white,
                                             ),
                                           )
-                                        : Image.network(SokcetData.url +
-                                            element.images!.first.link)),
+                                        : InkWell(
+                                            onTap: () => print(SokcetData.url +
+                                                element.images!.first.link),
+                                            child: Image.network(
+                                                SokcetData.url +
+                                                    element.images!.first.link),
+                                          )),
                                 Container(
                                   margin:
                                       const EdgeInsets.symmetric(vertical: 5),
